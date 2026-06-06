@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Technical Guide</title>
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary-bg: #f4f7f9;
+            --sidebar-bg: #232f3e;
+            --sidebar-hover: #37475a;
+            --text-color: #333;
+            --accent-color: #ff9900;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            padding-top: 20px;
+            transition: transform var(--transition-speed) ease;
+            z-index: 2000;
+        }
+
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            padding: 0 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 15px 25px;
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: var(--sidebar-hover);
+            color: white;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Toggle Button Styling */
+        .sidebar-toggle {
+            position: fixed;
+            left: calc(var(--sidebar-width) + 20px);
+            top: 20px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 2100;
+            transition: left var(--transition-speed) ease, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        body.sidebar-collapsed .sidebar-toggle {
+            left: 20px;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--sidebar-hover);
+        }
+
+        .sidebar-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 60px 40px;
+            flex-grow: 1;
+            width: 100%;
+            transition: margin-left var(--transition-speed) ease;
+            max-width: 1400px;
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+        }
+
+        /* Scroll Reveal Animation Styles */
+        section {
+            margin-bottom: 60px;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            scroll-margin-top: 40px;
+            
+            /* Initial reveal state */
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        section.reveal-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            color: var(--sidebar-bg);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+
+        .note-item {
+            margin-bottom: 50px;
+        }
+
+        .note-item h3 {
+            font-size: 1.2rem;
+            color: #444;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+
+        .img-container {
+            width: 100%;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 1500;
+        }
+
+        /* Tablet & Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 60px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            body.sidebar-open .sidebar {
+                transform: translateX(0);
+                width: 280px;
+            }
+
+            body.sidebar-open .sidebar-overlay {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 80px 15px 20px;
+            }
+
+            .sidebar-toggle {
+                left: 20px !important;
+            }
+
+            section {
+                padding: 20px;
+                scroll-margin-top: 80px;
+            }
+        }
+    </style>
+</head>
+<body class="sidebar-collapsed">
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Navigation">
+        <svg viewBox="0 0 24 24">
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+        </svg>
+    </button>
+
+    <nav class="sidebar">
+        <h2>AWS Guide</h2>
+        <ul>
+            <li><a href="#iam" onclick="handleNavClick()">IAM</a></li>
+            <li><a href="#ec2" onclick="handleNavClick()">EC2</a></li>
+            <li><a href="#s3" onclick="handleNavClick()">S3</a></li>
+            <li><a href="#rds" onclick="handleNavClick()">RDS</a></li>
+            <li><a href="#vpc" onclick="handleNavClick()">VPC</a></li>
+            <li><a href="#route53" onclick="handleNavClick()">Route 53</a></li>
+            <li><a href="#cloudwatch" onclick="handleNavClick()">CloudWatch</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>AWS Technical Guide</h1>
+
+            <section id="iam">
+                <h2>Identity & Access Management (IAM)</h2>
+                <div class="note-item">
+                    <h3>1. Dashboard Overview</h3>
+                    <div class="img-container"><img src="iam-1.png" alt="IAM Dashboard"></div>
+                </div>
+                <div class="note-item">
+                    <h3>2. Users and Groups</h3>
+                    <div class="img-container"><img src="iam-2.png" alt="IAM Users"></div>
+                </div>
+                <div class="note-item">
+                    <h3>3. Policies and Roles</h3>
+                    <div class="img-container"><img src="iam-3.png" alt="IAM Policies"></div>
+                </div>
+            </section>
+
+            <section id="ec2">
+                <h2>Elastic Compute Cloud (EC2)</h2>
+                <div class="note-item">
+                    <h3>4. Console Dashboard</h3>
+                    <div class="img-container"><img src="ec2-1.png" alt="EC2 Dashboard"></div>
+                </div>
+                <div class="note-item">
+                    <h3>5. Instance Management</h3>
+                    <div class="img-container"><img src="ec2-2.png" alt="EC2 Instances"></div>
+                </div>
+                <div class="note-item">
+                    <h3>6. Security Groups & Key Pairs</h3>
+                    <div class="img-container"><img src="ec2-3.png" alt="EC2 Security Groups"></div>
+                </div>
+            </section>
+
+            <section id="s3">
+                <h2>Simple Storage Service (S3)</h2>
+                <div class="note-item">
+                    <h3>7. Bucket List</h3>
+                    <div class="img-container"><img src="s3-1.png" alt="S3 Buckets"></div>
+                </div>
+                <div class="note-item">
+                    <h3>8. Object Permissions</h3>
+                    <div class="img-container"><img src="s3-2.png" alt="S3 Objects"></div>
+                </div>
+                <div class="note-item">
+                    <h3>9. Lifecycle Policies</h3>
+                    <div class="img-container"><img src="s3-3.png" alt="S3 Management"></div>
+                </div>
+            </section>
+
+            <section id="rds">
+                <h2>Relational Database Service (RDS)</h2>
+                <div class="note-item">
+                    <h3>10. Database Overview</h3>
+                    <div class="img-container"><img src="rds-1.png" alt="RDS Dashboard"></div>
+                </div>
+                <div class="note-item">
+                    <h3>11. DB Instances</h3>
+                    <div class="img-container"><img src="rds-2.png" alt="RDS Instances"></div>
+                </div>
+                <div class="note-item">
+                    <h3>12. Security & Connectivity</h3>
+                    <div class="img-container"><img src="rds-3.png" alt="RDS Security"></div>
+                </div>
+            </section>
+
+            <section id="vpc">
+                <h2>Virtual Private Cloud (VPC)</h2>
+                <div class="note-item">
+                    <h3>13. VPC Dashboard</h3>
+                    <div class="img-container"><img src="vpc-1.png" alt="VPC Dashboard"></div>
+                </div>
+                <div class="note-item">
+                    <h3>14. Subnets and Routing</h3>
+                    <div class="img-container"><img src="vpc-2.png" alt="VPC Subnets"></div>
+                </div>
+                <div class="note-item">
+                    <h3>15. Internet Gateways</h3>
+                    <div class="img-container"><img src="vpc-3.png" alt="VPC Gateways"></div>
+                </div>
+            </section>
+
+            <section id="route53">
+                <h2>Route 53</h2>
+                <div class="note-item">
+                    <h3>16. Hosted Zones</h3>
+                    <div class="img-container"><img src="route53-1.png" alt="Route 53 Zones"></div>
+                </div>
+                <div class="note-item">
+                    <h3>17. Record Sets</h3>
+                    <div class="img-container"><img src="route53-2.png" alt="Route 53 Records"></div>
+                </div>
+                <div class="note-item">
+                    <h3>18. Health Checks</h3>
+                    <div class="img-container"><img src="route53-3.png" alt="Route 53 Health"></div>
+                </div>
+            </section>
+
+            <section id="cloudwatch">
+                <h2>CloudWatch</h2>
+                <div class="note-item">
+                    <h3>19. Metrics and Alarms</h3>
+                    <div class="img-container"><img src="cloudwatch-1.png" alt="CloudWatch Alarms"></div>
+                </div>
+                <div class="note-item">
+                    <h3>20. Logs Management</h3>
+                    <div class="img-container"><img src="cloudwatch-2.png" alt="CloudWatch Logs"></div>
+                </div>
+                <div class="note-item">
+                    <h3>21. Dashboards</h3>
+                    <div class="img-container"><img src="cloudwatch-3.png" alt="CloudWatch Dashboards"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Sidebar Functionality
+        function toggleSidebar() {
+            const body = document.body;
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                body.classList.toggle('sidebar-open');
+                body.classList.remove('sidebar-collapsed');
+            } else {
+                body.classList.toggle('sidebar-collapsed');
+                body.classList.remove('sidebar-open');
+            }
+        }
+
+        function handleNavClick() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+        // Scroll Reveal Implementation
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                threshold: 0.15, // Trigger when 15% of the section is visible
+                rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the viewport
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-active');
+                        // Optional: observer.unobserve(entry.target); // Keeps animation static after first reveal
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
