@@ -5,6 +5,9 @@
 * [Elastic Compute Cloud (EC2)](#ec2)
 * [Simple Storage Service (S3)](#s3)
 * [Relational Database Service (RDS)](#rds)
+* [Virtual Private Cloud (VPC)](#vpc)
+* [Route 53](#route53)
+* [CloudWatch](#cloudwatch)
 
 ---
 
@@ -53,3 +56,39 @@
 
 ### 12. Security & Connectivity
 ![RDS Security](rds-3.png)
+
+---
+
+## VPC
+### 13. VPC Dashboard
+![VPC Dashboard](vpc-1.png)
+
+### 14. Subnets and Routing
+![VPC Subnets](vpc-2.png)
+
+### 15. Internet Gateways
+![VPC Gateways](vpc-3.png)
+
+---
+
+## Route 53
+### 16. Hosted Zones
+![Route 53 Zones](route53-1.png)
+
+### 17. Record Sets
+![Route 53 Records](route53-2.png)
+
+### 18. Health Checks
+![Route 53 Health](route53-3.png)
+
+---
+
+## CloudWatch
+### 19. Metrics and Alarms
+![CloudWatch Alarms](cloudwatch-1.png)
+
+### 20. Logs Management
+![CloudWatch Logs](cloudwatch-2.png)
+
+### 21. Dashboards
+![CloudWatch Dashboards](cloudwatch-3.png)
