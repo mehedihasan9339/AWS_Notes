@@ -128,6 +128,7 @@
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            padding-bottom: 100px; /* Added padding to ensure last section scrolls into view */
         }
 
         h1 {
@@ -148,8 +149,9 @@
             
             /* Initial reveal state */
             opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(30px); /* Reduced movement for smoother feel */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
         }
 
         section.reveal-active {
@@ -515,8 +517,8 @@
         // Scroll Reveal Implementation
         document.addEventListener("DOMContentLoaded", function() {
             const observerOptions = {
-                threshold: 0.15, // Trigger when 15% of the section is visible
-                rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the viewport
+                threshold: 0.1, // Trigger when 10% of the section is visible
+                rootMargin: "0px 0px -20px 0px" // More forgiving trigger point
             };
 
             const observer = new IntersectionObserver((entries) => {
