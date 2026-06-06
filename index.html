@@ -262,6 +262,9 @@
             <li><a href="#cloudwatch" onclick="handleNavClick()">CloudWatch</a></li>
             <li><a href="#lambda" onclick="handleNavClick()">Lambda</a></li>
             <li><a href="#cloudtrail" onclick="handleNavClick()">CloudTrail</a></li>
+            <li><a href="#sns" onclick="handleNavClick()">SNS</a></li>
+            <li><a href="#sqs" onclick="handleNavClick()">SQS</a></li>
+            <li><a href="#billing" onclick="handleNavClick()">Billing</a></li>
         </ul>
     </nav>
 
@@ -412,6 +415,54 @@
                     <div class="img-container"><img src="cloudtrail-3.png" alt="CloudTrail Insights"></div>
                 </div>
             </section>
+
+            <section id="sns">
+                <h2>Simple Notification Service (SNS)</h2>
+                <div class="note-item">
+                    <h3>28. Topics Overview</h3>
+                    <div class="img-container"><img src="sns-1.png" alt="SNS Topics"></div>
+                </div>
+                <div class="note-item">
+                    <h3>29. Subscriptions</h3>
+                    <div class="img-container"><img src="sns-2.png" alt="SNS Subscriptions"></div>
+                </div>
+                <div class="note-item">
+                    <h3>30. Message Delivery</h3>
+                    <div class="img-container"><img src="sns-3.png" alt="SNS Delivery"></div>
+                </div>
+            </section>
+
+            <section id="sqs">
+                <h2>Simple Queue Service (SQS)</h2>
+                <div class="note-item">
+                    <h3>31. Queues Overview</h3>
+                    <div class="img-container"><img src="sqs-1.png" alt="SQS Queues"></div>
+                </div>
+                <div class="note-item">
+                    <h3>32. Message Lifecycle</h3>
+                    <div class="img-container"><img src="sqs-2.png" alt="SQS Lifecycle"></div>
+                </div>
+                <div class="note-item">
+                    <h3>33. Visibility Timeout</h3>
+                    <div class="img-container"><img src="sqs-3.png" alt="SQS Visibility"></div>
+                </div>
+            </section>
+
+            <section id="billing">
+                <h2>Billing and Cost Management</h2>
+                <div class="note-item">
+                    <h3>34. Dashboard Overview</h3>
+                    <div class="img-container"><img src="billing-1.png" alt="Billing Dashboard"></div>
+                </div>
+                <div class="note-item">
+                    <h3>35. Cost Explorer</h3>
+                    <div class="img-container"><img src="billing-2.png" alt="Cost Explorer"></div>
+                </div>
+                <div class="note-item">
+                    <h3>36. Budgets and Forecasts</h3>
+                    <div class="img-container"><img src="billing-3.png" alt="Budgets"></div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -447,7 +498,6 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('reveal-active');
-                        // Optional: observer.unobserve(entry.target); // Keeps animation static after first reveal
                     }
                 });
             }, observerOptions);
