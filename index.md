@@ -4,6 +4,7 @@
 * [Identity & Access Management (IAM)](#iam)
 * [Elastic Compute Cloud (EC2)](#ec2)
 * [Simple Storage Service (S3)](#s3)
+* [Relational Database Service (RDS)](#rds)
 
 ---
 
@@ -40,3 +41,15 @@
 
 ### 9. Lifecycle Policies
 ![S3 Management](s3-3.png)
+
+---
+
+## RDS
+### 10. Database Overview
+![RDS Dashboard](rds-1.png)
+
+### 11. DB Instances
+![RDS Instances](rds-2.png)
+
+### 12. Security & Connectivity
+![RDS Security](rds-3.png)
