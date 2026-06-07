@@ -6,7 +6,7 @@
     <title>AWS Technical Guide</title>
     <style>
         :root {
-            --sidebar-width: 250px;
+            --sidebar-width: 280px;
             --primary-bg: #f4f7f9;
             --sidebar-bg: #232f3e;
             --sidebar-hover: #37475a;
@@ -50,10 +50,20 @@
 
         .sidebar h2 {
             text-align: center;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             color: var(--accent-color);
             padding: 0 15px;
+            font-weight: 700;
+        }
+
+        .sidebar-category {
+            padding: 20px 25px 5px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 700;
         }
 
         .sidebar ul {
@@ -64,18 +74,27 @@
 
         .sidebar ul li a {
             display: block;
-            padding: 15px 25px;
-            color: #ddd;
+            padding: 12px 25px;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
             transition: all 0.2s ease;
             font-weight: 500;
+            font-size: 0.95rem;
             border-left: 4px solid transparent;
         }
 
         .sidebar ul li a:hover {
             background-color: var(--sidebar-hover);
             color: white;
-            border-left: 4px solid var(--accent-color);
+            padding-left: 30px;
+        }
+
+        /* ScrollSpy Active Class */
+        .sidebar ul li a.active {
+            color: white;
+            background-color: var(--sidebar-hover);
+            border-left-color: var(--accent-color);
+            padding-left: 32px;
         }
 
         /* Toggle Button Styling */
@@ -128,7 +147,7 @@
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding-bottom: 100px; /* Added padding to ensure last section scrolls into view */
+            padding-bottom: 100px;
         }
 
         h1 {
@@ -149,7 +168,7 @@
             
             /* Initial reveal state */
             opacity: 0;
-            transform: translateY(30px); /* Reduced movement for smoother feel */
+            transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
             will-change: opacity, transform;
         }
@@ -254,19 +273,49 @@
 
     <nav class="sidebar">
         <h2>AWS Guide</h2>
+        
+        <div class="sidebar-category">Security</div>
         <ul>
             <li><a href="#iam" onclick="handleNavClick()">IAM</a></li>
+            <li><a href="#cloudtrail" onclick="handleNavClick()">CloudTrail</a></li>
+        </ul>
+
+        <div class="sidebar-category">Compute</div>
+        <ul>
             <li><a href="#ec2" onclick="handleNavClick()">EC2</a></li>
+            <li><a href="#lambda" onclick="handleNavClick()">Lambda</a></li>
+        </ul>
+
+        <div class="sidebar-category">Storage</div>
+        <ul>
             <li><a href="#s3" onclick="handleNavClick()">S3</a></li>
+        </ul>
+
+        <div class="sidebar-category">Database</div>
+        <ul>
             <li><a href="#rds" onclick="handleNavClick()">RDS</a></li>
+        </ul>
+
+        <div class="sidebar-category">Networking</div>
+        <ul>
             <li><a href="#vpc" onclick="handleNavClick()">VPC</a></li>
             <li><a href="#route53" onclick="handleNavClick()">Route 53</a></li>
+        </ul>
+
+        <div class="sidebar-category">Management</div>
+        <ul>
             <li><a href="#cloudwatch" onclick="handleNavClick()">CloudWatch</a></li>
-            <li><a href="#lambda" onclick="handleNavClick()">Lambda</a></li>
-            <li><a href="#cloudtrail" onclick="handleNavClick()">CloudTrail</a></li>
+            <li><a href="#billing" onclick="handleNavClick()">Billing</a></li>
+        </ul>
+
+        <div class="sidebar-category">Integration</div>
+        <ul>
             <li><a href="#sns" onclick="handleNavClick()">SNS</a></li>
             <li><a href="#sqs" onclick="handleNavClick()">SQS</a></li>
-            <li><a href="#billing" onclick="handleNavClick()">Billing</a></li>
+        </ul>
+
+        <div class="sidebar-category">Advanced</div>
+        <ul>
             <li><a href="#master" onclick="handleNavClick()">Master Notes</a></li>
         </ul>
     </nav>
@@ -515,23 +564,35 @@
         }
 
         // Scroll Reveal Implementation
-        document.addEventListener("DOMContentLoaded", function() {
-            const observerOptions = {
-                threshold: 0.1, // Trigger when 10% of the section is visible
-                rootMargin: "0px 0px -20px 0px" // More forgiving trigger point
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('reveal-active');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('section').forEach(section => {
-                observer.observe(section);
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-active');
+                }
             });
+        }, { threshold: 0.1, rootMargin: "0px 0px -20px 0px" });
+
+        document.querySelectorAll('section').forEach(section => {
+            revealObserver.observe(section);
+        });
+
+        // ScrollSpy Implementation
+        const spyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.sidebar ul li a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.2, rootMargin: "-10% 0px -80% 0px" });
+
+        document.querySelectorAll('section').forEach(section => {
+            spyObserver.observe(section);
         });
     </script>
 </body>
